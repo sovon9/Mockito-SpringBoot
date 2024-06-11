@@ -33,7 +33,7 @@ public class ProductController {
 	}
 	
 	@Value("${couponService.url:'http://localhost'}")
-	private String couponUrl="";
+	private String couponUrl;
 	
 	@PostMapping("/save")
 	public Product createProduct(@RequestBody Product product)
