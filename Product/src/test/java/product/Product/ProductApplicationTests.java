@@ -55,7 +55,10 @@ class ProductApplicationTests {
 		assertNotNull(createProduct);
 		assertEquals(40, createProduct.getPrice());
 	}
-	
+
+	/*
+	 * Testing private method verifyProduct
+	 */
 	@Test
 	void testIsVerified() throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException
 	{
