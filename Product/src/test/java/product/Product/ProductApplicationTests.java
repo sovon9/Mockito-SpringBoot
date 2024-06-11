@@ -2,10 +2,13 @@ package product.Product;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -51,6 +54,31 @@ class ProductApplicationTests {
 		System.out.println(createProduct.getPrice());
 		assertNotNull(createProduct);
 		assertEquals(40, createProduct.getPrice());
+	}
+	
+	@Test
+	void testIsVerified() throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException
+	{
+		/*
+		 * getDeclaredMethod parameters
+		 * name             the name of the method
+		 * parameterTypes   the parameter array
+		 */
+		Method method = controller.getClass().getDeclaredMethod("verifyProduct", Product.class);
+		method.setAccessible(true);
+		Product product = new Product();
+		product.setId(123L); // commenting this line will fail the test 
+		product.setCouponCode(TRY);
+		product.setPrice(100);
+		/*
+		 * invoke parameters
+		 * obj 	the object the underlying method is invoked from 
+		 * args  the arguments used for the method call
+		 * it returns object
+		 */
+		Object invoke = method.invoke(controller, product);
+		boolean result = (boolean)invoke;
+		assertTrue(result);
 	}
 
 }
