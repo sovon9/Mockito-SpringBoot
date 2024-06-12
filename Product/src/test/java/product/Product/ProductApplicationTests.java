@@ -16,6 +16,8 @@ import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.web.client.RestTemplate;
 
 import product.Product.controller.ProductController;
@@ -24,6 +26,7 @@ import product.Product.dto.Coupon;
 import product.Product.model.Product;
 
 @SpringBootTest
+@ActiveProfiles("default")
 class ProductApplicationTests {
 
 	private static final String TRY = "TRY";
@@ -40,9 +43,12 @@ class ProductApplicationTests {
 		Product product = new Product();
 		product.setCouponCode(TRY);
 		product.setPrice(100);
-		Field field = controller.getClass().getDeclaredField("couponUrl");
-		field.setAccessible(true);
-		field.set(controller, "http://localhost:8080/api/couponCode/");
+		// we can set the field vlaue using Reflection API or use SpringTest provided ReflectionTestUtils
+		ReflectionTestUtils.setField(controller, "couponUrl", "http://localhost:8080/api/couponCode/");
+		// or
+//		Field field = controller.getClass().getDeclaredField("couponUrl");
+//		field.setAccessible(true);
+//		field.set(controller, "http://localhost:8080/api/couponCode/");
 		Coupon coupon = new Coupon();
 		coupon.setCode(TRY);
 		coupon.setDiscount(60);
@@ -55,7 +61,7 @@ class ProductApplicationTests {
 		assertNotNull(createProduct);
 		assertEquals(40, createProduct.getPrice());
 	}
-
+	
 	/*
 	 * Testing private method verifyProduct
 	 */
